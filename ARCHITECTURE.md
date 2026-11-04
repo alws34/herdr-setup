@@ -130,7 +130,7 @@ stay in step, because mods can't import each other's code.
   weren't looking; `idle` once you look) stays steady: with it pulsing too, every idle session blinked.
 - **Tab names:** `spaces-tree` renames a Claude tab still under a default name ("Claude Code",
   a number) to its terminal title, Claude's session title, once it has one. Names the person
-  gave are left alone.
+  gave are left alone. Dragging a session row within its space reorders it (`tab.move`).
 - **Right-hand tools:** `tabs-vs` rebuilds the tools column with `layout.set`, merging the
   click state from `layouts/.state/vscode.json` first so dragged sizes stay. An open canvas is
   an Electron window over its pane (`mods/browser/shell`); it keeps the pane's fixed edge when

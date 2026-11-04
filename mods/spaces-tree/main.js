@@ -398,14 +398,30 @@ export default class Spaces extends View {
     const pinned = shared(PINNED) ?? [], unread = shared(UNREAD) ?? [];
     const tabs = w.tabs.filter((tab) => !tab.settled);
     tabs.sort((a, b) => pinned.includes(b.id) - pinned.includes(a.id)); // stable: pinned first
-    return tabs.map((tab) => {
+    // Drag a session within its space to reorder it (asked 2026-11-04), like the space rows:
+    // press, move over another session of the same space (a line shows where), let go: tab.move.
+    const d = this.tabDrag?.space === w.id ? this.tabDrag : null;
+    return tabs.map((tab, j) => {
       const tabPanes = mine.filter((p) => p.tab === tab.id);
       const program = (tabPanes.find((p) => p.program?.agent) ?? tabPanes.find((p) => p.terminal))?.program;
       const name = /^\d+$|^tb[0-9a-f]+$/.test(tab.name) && program ? `${program.name} ${tab.name}` : tab.name;
       const on = w.active && tab.active;
-      return h_flex().id(`tab-${tab.id}`).h(24).flex_none().pl(36).pr(8).gap(7).items_center().rounded(6).text_size(12)
+      return h_flex().id(`tab-${tab.id}`).relative().h(24).flex_none().pl(36).pr(8).gap(7).items_center().rounded(6).text_size(12)
         .text_color(on ? t.foreground : t.muted).when(on, (el) => el.bg(t.hover)).hover((s) => s.bg(t.hover)).cursor_pointer()
-        .on_mouse_down("left", stop)
+        .when(d?.from === j && d.over !== j, (el) => el.opacity(0.5))
+        .when(d && d.over === j && d.from !== j, (el) => el.child(div().absolute().left(0).right(0).h(2).bg(t.accent)
+          .when(d.from < j, (line) => line.bottom(0)).when(d.from > j, (line) => line.top(0))))
+        .on_mouse_down("left", (e, cx) => { stop(e, cx); this.tabDrag = { space: w.id, from: j, over: j }; })
+        .on_mouse_move((_e, cx) => {
+          const g = this.tabDrag;
+          if (g?.space === w.id && g.over !== j) { g.over = j; cx.notify(); }
+        })
+        .on_mouse_up("left", (_e, cx) => {
+          const g = this.tabDrag;
+          this.tabDrag = null;
+          if (g?.space === w.id && g.from !== j) run("tab.move", { id: tabs[g.from].id, index: w.tabs.indexOf(tab) + 1 });
+          cx.notify();
+        })
         .on_click(() => { run("space.select", { id: w.id }); run("tab.select", { id: tab.id }); })
         .on_mouse_down("right", () => this.sessionMenu(w, tab))
         .child(program?.icon ? (program.tint ? svg(program.icon).size(13).flex_none().text_color(t.muted) : image(program.icon).size(13).flex_none())
@@ -532,7 +548,7 @@ export default class Spaces extends View {
         .child(div().id("space-new").size(26).flex_none().flex().items_center().justify_center().rounded(6).hover(s => s.bg(t.hover).text_color(t.foreground))
           .on_click(() => run("space.new")).child(svg("mods/workspace-chrome/plus.svg").size(14))))
       .child(v_flex().flex_1().min_h(0).px(8).pb(14).overflow_y_scrollbar().mode("always")
-        .on_mouse_up("left", (_e, cx) => { this.pressed = null; cx.notify(); })
+        .on_mouse_up("left", (_e, cx) => { this.pressed = null; this.tabDrag = null; cx.notify(); })
         .children(this.grouped(t, collapsed)));
   }
 }
