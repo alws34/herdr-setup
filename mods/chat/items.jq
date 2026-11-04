@@ -72,5 +72,8 @@ elif .type == "attachment" and .attachment.type == "queued_command" then
 elif .type == "attachment" and .attachment.type == "model" then
   {k: "model", name: .attachment.identity.marketingName, id: .attachment.identity.modelId}
 elif .type == "system" and .subtype == "compact_boundary" then
-  {k: "note", id: .uuid, text: "Conversation compacted"}
+  # rule: drawn as a divider, like the desktop app; saved: context tokens freed (older Claude Codes
+  # wrote no postTokens).
+  {k: "note", id: .uuid, text: "Conversation compacted", rule: true,
+   saved: (.compactMetadata | if .preTokens and .postTokens then .preTokens - .postTokens else null end)}
 else empty end

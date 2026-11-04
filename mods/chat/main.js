@@ -688,7 +688,7 @@ export default class Chat extends View {
         segments(item.text).forEach((seg, i) => out.push(seg.code !== undefined
           ? { key: `c:${item.id}:${i}`, kind: "code", code: seg.code, lang: seg.lang }
           : { key: `t:${item.id}:${i}`, kind: "md", text: seg.md, role: roles[n] }));
-      } else out.push({ key: `${item.k}:${item.id}`, kind: item.k, text: item.text, imgs: item.imgs });
+      } else out.push({ key: `${item.k}:${item.id}`, kind: item.k, text: item.text, imgs: item.imgs, rule: item.rule, saved: item.saved });
     }
     close(true);
     return out;
@@ -1142,8 +1142,18 @@ export default class Chat extends View {
           .when(Boolean(open), (el) => el.child(v_flex().mt(6).gap(10)
             .children(b.tools.map((tool) => this.toolDetail(t, tool, b.tools.length > 1))))));
       }
-      case "note":
+      case "note": {
+        // A compaction is a divider across the chat, with the tokens it freed (2026-11-05).
+        if (b.rule) {
+          const k = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : `${Math.round(n / 1000)}k`);
+          const text = b.saved > 0 ? `${b.text} · ${k(b.saved)} tokens saved` : b.text;
+          return col(h_flex().w_full().py(12).gap(12).items_center().text_size(12).text_color(t.dim)
+            .child(div().flex_1().h(1).bg(t.border))
+            .child(div().flex_none().child(this.selText(`n-${b.key}`, text)))
+            .child(div().flex_1().h(1).bg(t.border)));
+        }
         return col(h_flex().w_full().py(10).justify_center().text_size(12).text_color(t.dim).child(this.selText(`n-${b.key}`, b.text)));
+      }
       default:
         return col(div());
     }
