@@ -544,7 +544,13 @@
                   "id": "tool-canvases",
                   "type": "block",
                   "content": {
-                    "mod": "canvases"
+                    "mod": "browser",
+                    "props": {
+                      "tab": "tb74b8e4f37381fae8eb8da673041b27e5",
+                      "session": "tb74b8e4f37381fae8eb8da673041b27e5.cv-EocpzFHUSq9r1W3FqbCdhs",
+                      "url": "https://claude.ai/artifact/EocpzFHUSq9r1W3FqbCdhs",
+                      "marker": 1
+                    }
                   },
                   "hidden": true
                 }

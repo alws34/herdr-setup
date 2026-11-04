@@ -1,6 +1,6 @@
 {
   "agents": {
-    "main.js": "2a835dd6c3ed356f",
+    "main.js": "b574e15d7b0f15e5",
     "mod.json": "c1d087260ba7b076"
   },
   "changes": {
@@ -17,7 +17,7 @@
     "chevron-right.svg": "7867764fc431794c",
     "file.svg": "316c5ba4beaebfe1",
     "folder.svg": "64e7b5165472b129",
-    "main.js": "00328fa91b49111d",
+    "main.js": "95e3448d12d57c8c",
     "mod.json": "433fbf9dfa3e359a"
   },
   "help": {
@@ -34,7 +34,7 @@
     "json": "657fdb5a0f469344"
   },
   "machine-add": {
-    "main.js": "0e00544ee1b8e02c",
+    "main.js": "2f5d8239d77a3056",
     "mod.json": "20fc0fe012d028a0"
   },
   "menu": {
@@ -67,7 +67,7 @@
     "mod.json": "433fbf9dfa3e359a"
   },
   "spaces": {
-    "main.js": "ab767ba06ac5f0d7",
+    "main.js": "829379c2a6776f3e",
     "mod.json": "4a42ed2202338077"
   },
   "tabs": {
@@ -380,7 +380,7 @@
     "mod.json": "433fbf9dfa3e359a"
   },
   "worktree": {
-    "main.js": "b29c1fb575b13320",
+    "main.js": "cf08e9c60adaa09b",
     "mod.json": "433fbf9dfa3e359a"
   }
 }
