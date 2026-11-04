@@ -447,7 +447,7 @@
                       }
                     }
                   ],
-                  "active": "chat"
+                  "active": "main"
                 }
               ],
               "background": "canvas"
@@ -544,13 +544,7 @@
                   "id": "tool-canvases",
                   "type": "block",
                   "content": {
-                    "mod": "browser",
-                    "props": {
-                      "tab": "tb74b8e4f37381fae8eb8da673041b27e5",
-                      "session": "tb74b8e4f37381fae8eb8da673041b27e5.cv-EocpzFHUSq9r1W3FqbCdhs",
-                      "url": "https://claude.ai/artifact/EocpzFHUSq9r1W3FqbCdhs",
-                      "marker": 1
-                    }
+                    "mod": "canvases"
                   },
                   "hidden": true
                 }
@@ -596,6 +590,16 @@
           "size": {
             "px": 0
           }
+        },
+        {
+          "id": "claude-resume",
+          "type": "block",
+          "content": {
+            "mod": "claude-resume"
+          },
+          "size": {
+            "px": 0
+          }
         }
       ],
       "background": "chrome",
@@ -617,6 +621,16 @@
         11
       ],
       "preview": "layouts/vscode.svg"
+    },
+    {
+      "id": "bdf63f593d68ba3fb3b2f7dc76204e400",
+      "type": "block",
+      "content": {
+        "mod": "claude-resume"
+      },
+      "size": {
+        "px": 320
+      }
     }
   ],
   "theme": {
