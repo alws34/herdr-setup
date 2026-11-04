@@ -29,7 +29,8 @@ pieces fit together.
 ## Git
 
 This folder is a git repo, pushed to the private `https://github.com/alws34/herdr-setup`
-(branch `main`, HTTPS with the keychain's GitHub login; this Mac has no SSH key GitHub knows).
+(branch `main`, remote `git@github.com:alws34/herdr-setup.git` over SSH with `~/.ssh/id_ed25519`,
+added to GitHub on 2026-11-04).
 
 - `.gitignore` keeps out runtime data (`data/`: chat screenshots, browser profiles and
   cookies), secrets (`clickup-board.json` holds the ClickUp token), state the app rewrites
