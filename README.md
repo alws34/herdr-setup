@@ -1,17 +1,62 @@
+<div align="center">
+
 # herdr-setup
 
-Alon's setup of the [Herdr](https://herdr.dev) desktop app (herdr-app 0.1.12): a VS Code-style
-window for running many Claude Code sessions side by side, each also readable as a chat.
-This repo is the app's home folder, `~/.config/herdr-app`. Herdr redraws itself live from these files.
+**A VS Code-style home for running many Claude Code sessions side by side.**
 
-The main layout is `vscode`, in the Ember theme (amber, light and dark):
+Alon's setup of the [Herdr](https://herdr.dev) desktop app: every session is a terminal you can
+also read and answer as a chat, grouped by project, with the tools each one needs beside it.
 
-- **Sidebar:** spaces and their sessions. A session asking you something has a breathing dot,
-  Claude tabs name themselves after their session, and sessions can be dragged to reorder.
-- **Main area:** a session as its terminal or as a chat, plus file tabs with an editor.
-- **Right-hand tools, per session:** side chat, a browser, a terminal, and Canvases (the
-  claude.ai pages the session published, opened in place).
-- **Title and status bars:** system load, Claude usage and quota.
+![herdr-app 0.1.13](https://img.shields.io/badge/herdr--app-0.1.13-f0a04b?style=flat-square&labelColor=1d1a17)
+![macOS](https://img.shields.io/badge/macOS-only-e6dfd6?style=flat-square&labelColor=1d1a17)
+![theme](https://img.shields.io/badge/theme-Ember-a3c46e?style=flat-square&labelColor=1d1a17)
+
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screenshot-light.png">
+  <img alt="The vscode layout: spaces and sessions on the left, a Claude session shown as a chat in the middle, system load and Claude usage in the title bar" src="docs/screenshot-dark.png">
+</picture>
+
+<sub>A mock with made-up projects and sessions, drawn to match the real window (`docs/screenshot.html`).</sub>
+
+## What you get
+
+This repo *is* the app's home folder, `~/.config/herdr-app`. Herdr redraws the window live from
+these files, so a change here shows up as soon as it's saved. The main layout is `vscode`, in the
+Ember theme (amber, light and dark).
+
+### Sessions that tell you when they need you
+
+- **Spaces** group sessions by project, each with its git branch and how many agents are running.
+- A session that's **asking you something** or **finished while you were away** has a softly
+  breathing dot. Only that one breathes; it stops once you've looked.
+- Claude tabs **name themselves** after their session title, like the Claude desktop app.
+- **Drag** a session within its space to reorder it; right-click for the rest.
+
+### Read a session as a chat
+
+- Any Claude Code session can be shown as its **terminal** or as a **chat**, built from its
+  transcript: replies in Markdown, code blocks, changed files with their line counts.
+- Scroll up and **older messages load** on their own. Answer from the box at the bottom.
+
+### Tools beside each session
+
+| | |
+|---|---|
+| **Side chat** | A second chat next to the main one |
+| **Chrome** | A real browser, in a pane |
+| **Terminal** | A shell for the same session |
+| **Canvases** | The claude.ai pages the session published, opened in place |
+
+Any of them can move into the main area and back.
+
+### Around the edges
+
+- **Title bar:** a command box, CPU, GPU, memory and network, Claude usage and quota.
+- **Side bar sections:** Explorer, Search, Markdown, Git changes and graph, Agents, Blueprint
+  (an agent's flow as a diagram), Utilization, Extensions. Drag to reorder, collapse, resize.
+- **Boards:** ClickUp and Linear managed in place; start an agent straight from a task.
 
 ## What's here
 
@@ -23,11 +68,13 @@ The main layout is `vscode`, in the Ember theme (amber, light and dark):
 | `keys.json` | Keyboard shortcuts |
 | `settings.json` | Zoom, font size, sounds |
 | `backgrounds/`, `icons/` | Images the layouts and mods use |
+| `docs/` | The README's screenshots and the page they're drawn from |
 | `CLAUDE.md` | Rules for Claude sessions editing this folder |
 | `ARCHITECTURE.md` | How the `vscode` layout fits together, and the shared-state keys mods talk through |
 | `AGENTS.md`, `*.d.ts`, `frame/` | Herdr's own manual and API types. The app rewrites them; don't edit |
 
-The main mods made here:
+<details>
+<summary><b>The mods made here</b></summary>
 
 | Mods | Do |
 |---|---|
@@ -39,6 +86,8 @@ The main mods made here:
 | `changes-vs`, `git-graph`, `blueprint`, `servers`, `sysmon`, `quota`, `usage-bar` | Git changes and graph, an agent's flow, servers, system load, Claude usage |
 | `clickup-board`, `linear-board`, `forge-*` | ClickUp, Linear, GitLab and GitHub panels |
 | `insights`, `extensions`, `customize` | Claude Code usage, plugins and skills |
+
+</details>
 
 ## Set up on a new Mac
 
@@ -56,8 +105,9 @@ The main mods made here:
    as `{"token": "pk_..."}`.
 5. Start Herdr and pick the `vscode` layout (`cmd-shift-l`).
 
-The first canvas sign-in asks macOS for the "Claude Safe Storage" keychain item, to reuse the
-Claude desktop app's claude.ai login; Always Allow avoids repeats.
+> [!NOTE]
+> The first canvas sign-in asks macOS for the "Claude Safe Storage" keychain item, to reuse the
+> Claude desktop app's claude.ai login. Always Allow avoids repeats.
 
 ## Not in git
 
@@ -68,7 +118,8 @@ Claude desktop app's claude.ai login; Always Allow avoids repeats.
 - State the app rewrites: `shared.json`, `view.json`, `layouts/.state/` and others.
 - `node_modules/`.
 
-Never commit tokens, cookies or keys.
+> [!WARNING]
+> Never commit tokens, cookies or keys.
 
 ## Changing it
 
@@ -78,3 +129,6 @@ Read `CLAUDE.md` first. In short:
 - After changing a mod, run `herdr-app check ~/.config/herdr-app/mods/<name>`.
 - `herdr-app status` shows errors; `herdr-app shot x.png` saves the window's last frame.
 - If a layout breaks the window, `ctrl-alt-shift-escape` gets you out.
+- To redraw the README's screenshots after editing `docs/screenshot.html`, render it at
+  1568×998 with Chrome headless (`--force-device-scale-factor=2`), once as is and once with
+  `class="light"` on `<html>`.
