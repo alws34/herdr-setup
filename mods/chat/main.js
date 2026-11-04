@@ -433,6 +433,12 @@ export default class Chat extends View {
       if (this.inputTab) this.saveDraft(this.inputTab, this.input.value());
     });
     cx.timer.every(700, (cx) => this.tick(cx));
+    // The textarea's own bindings (context "Input": MoveUp, Enter, ...) run before any key handler, so
+    // the "/" menu's keys are bindings too, one level deeper; the wrapper is "ChatSlash" only while the
+    // menu shows, so the textarea keeps its keys otherwise (2026-11-05).
+    try {
+      cx.bind_keys(["up", "down", "enter", "tab", "escape"].map((k) => ({ keystroke: k, action: `chat_slash_${k}`, context: "ChatSlash > Input" })));
+    } catch (e) { console.log(`chat: "/" menu keys not bound: ${e?.message ?? e}`); }
   }
 
   saveDraft(tabId, text) {
@@ -993,6 +999,24 @@ export default class Chat extends View {
     if (this.inputTab) this.saveDraft(this.inputTab, v);
   }
 
+  // Up/Down move the highlight and write that command into the box; set_value fires no "change", so
+  // the list stays filtered by what was typed. Enter/Tab pick it, Esc closes the menu.
+  slashKey(key, cx) {
+    const items = this.slashMatches();
+    if (!items.length) return;
+    const sel = Math.min(this.slash.sel, items.length - 1);
+    if (key === "up" || key === "down") {
+      this.slash.sel = (sel + (key === "up" ? -1 : 1) + items.length) % items.length;
+      const v = `/${items[this.slash.sel].name}`;
+      this.input.set_value(v);
+      try { this.input.set_selected_range({ start: v.length, end: v.length }); } catch (_) {}
+      if (this.inputTab) this.saveDraft(this.inputTab, v);
+    } else if (key === "escape") this.slash = null;
+    else this.pickCommand(items[sel]);
+    cx.stop_propagation();
+    cx.notify();
+  }
+
   slashMenu(t, items) {
     const sel = Math.min(this.slash.sel, items.length - 1);
     return v_flex().id("slash-menu").w_full().max_h(320).overflow_y_scroll().p(4).rounded(10)
@@ -1211,26 +1235,13 @@ export default class Chat extends View {
           // Enter sends (submit); Cmd+Enter (and Shift+Enter) adds a line. The textarea fires no submit
           // for Cmd+Enter, so the wrapper catches the key (2026-11-01).
           .child(div().flex_1().min_w(0).text_size(14)
+            .when(slashItems.length > 0, (el) => el.key_context("ChatSlash"))
+            .on_action("chat_slash_up", (_e, cx) => this.slashKey("up", cx))
+            .on_action("chat_slash_down", (_e, cx) => this.slashKey("down", cx))
+            .on_action("chat_slash_enter", (_e, cx) => this.slashKey("enter", cx))
+            .on_action("chat_slash_tab", (_e, cx) => this.slashKey("tab", cx))
+            .on_action("chat_slash_escape", (_e, cx) => this.slashKey("escape", cx))
             .on_key_down((e, cx) => {
-              // The "/" menu takes Up/Down, Enter/Tab (pick) and Esc before the textarea does.
-              const items = this.slashMatches();
-              if (items.length && ["up", "down", "enter", "tab", "escape"].includes(e.key) && !e.modifiers.shift && !e.modifiers.platform) {
-                const sel = Math.min(this.slash.sel, items.length - 1);
-                if (e.key === "up" || e.key === "down") {
-                  // The highlighted command goes into the box as you move (2026-11-05). set_value fires no
-                  // "change", so the menu keeps the list filtered by what was typed.
-                  this.slash.sel = (sel + (e.key === "up" ? -1 : 1) + items.length) % items.length;
-                  const v = `/${items[this.slash.sel].name}`;
-                  this.input.set_value(v);
-                  try { this.input.set_selected_range({ start: v.length, end: v.length }); } catch (_) {}
-                  if (this.inputTab) this.saveDraft(this.inputTab, v);
-                }
-                else if (e.key === "escape") this.slash = null;
-                else this.pickCommand(items[sel]);
-                cx.stop_propagation();
-                cx.notify();
-                return;
-              }
               if (e.key === "enter" && e.modifiers.platform && !e.modifiers.shift) { this.input.replace("\n"); cx.stop_propagation(); }
             })
             .child(Textarea.new(this.input).w_full().bg(t.surface).border(0).p(0)))
