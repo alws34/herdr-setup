@@ -1,0 +1,28 @@
+# Herdr setup repo: mods, layouts, themes, keys and notes. Never runtime data or secrets.
+
+# Runtime data: chat screenshots, browser profiles (cookies), caches.
+data/
+*.sock
+.DS_Store
+
+# Secrets.
+clickup-board.json
+clickup-board-issues.json
+*.pem
+*.key
+.env*
+
+# State Herdr rewrites all the time (window, panes, clicks, shared mod state).
+shared.json
+view.json
+seen.json
+window.json
+layouts/.state/
+
+# Herdr's own update notes cache.
+update-notes-cache.md
+update-notes-media/
+update-notes.json
+
+# Installed dependencies: `npm install` in mods/browser/shell brings them back.
+node_modules/

@@ -1,0 +1,7 @@
+{
+  "name": "herdr-browser-shell",
+  "private": true,
+  "description": "One real Chromium window per Herdr tab, glued over its browser pane",
+  "main": "main.cjs",
+  "dependencies": { "electron": "44.9.0" }
+}

@@ -1,0 +1,627 @@
+{
+  "id": "r505877359b74d4fdbf359a559db6807e",
+  "type": "row",
+  "children": [
+    {
+      "id": "root",
+      "type": "column",
+      "children": [
+        {
+          "id": "title",
+          "type": "row",
+          "children": [
+            {
+              "id": "title-bar",
+              "type": "block",
+              "content": {
+                "mod": "vs-chrome",
+                "props": {
+                  "role": "title"
+                }
+              },
+              "window_drag": true
+            },
+            {
+              "id": "sysmon-bar",
+              "type": "block",
+              "content": {
+                "mod": "sysmon",
+                "props": {
+                  "role": "bar"
+                }
+              },
+              "size": {
+                "px": 470
+              }
+            },
+            {
+              "id": "usage",
+              "type": "block",
+              "content": {
+                "mod": "quota",
+                "props": {
+                  "only": [
+                    "claude"
+                  ]
+                }
+              },
+              "size": {
+                "px": 320
+              }
+            },
+            {
+              "id": "title-clock",
+              "type": "block",
+              "content": {
+                "mod": "vs-chrome",
+                "props": {
+                  "role": "clock"
+                }
+              },
+              "size": {
+                "px": 60
+              },
+              "window_drag": true
+            }
+          ],
+          "size": {
+            "px": 35
+          },
+          "resizable": false
+        },
+        {
+          "id": "body",
+          "type": "row",
+          "children": [
+            {
+              "id": "activity",
+              "type": "block",
+              "content": {
+                "mod": "vs-chrome",
+                "props": {
+                  "role": "activity"
+                }
+              },
+              "size": {
+                "px": 48
+              }
+            },
+            {
+              "id": "files-panel",
+              "type": "block",
+              "content": {
+                "mod": "files-plus",
+                "props": {
+                  "session": true
+                }
+              },
+              "size": {
+                "px": 300
+              },
+              "min": 180,
+              "max": 700,
+              "hidden": true
+            },
+            {
+              "id": "search-panel",
+              "type": "block",
+              "content": {
+                "mod": "term-search"
+              },
+              "size": {
+                "px": 300
+              },
+              "min": 180,
+              "max": 700,
+              "hidden": true
+            },
+            {
+              "id": "md-panel",
+              "type": "block",
+              "content": {
+                "mod": "markdown-browser",
+                "props": {
+                  "session": true
+                }
+              },
+              "size": {
+                "px": 300
+              },
+              "min": 180,
+              "max": 700,
+              "hidden": true
+            },
+            {
+              "id": "sections",
+              "type": "column",
+              "children": [
+                {
+                  "id": "sections-bar",
+                  "type": "block",
+                  "content": {
+                    "mod": "vsections",
+                    "props": {
+                      "role": "bar"
+                    }
+                  },
+                  "size": {
+                    "px": 35
+                  }
+                },
+                {
+                  "id": "sections-body",
+                  "type": "column",
+                  "children": [
+                    {
+                      "id": "grp-spaces",
+                      "type": "column",
+                      "children": [
+                        {
+                          "id": "sec-spaces-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "spaces",
+                              "title": "Spaces"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-spaces-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "spaces-tree"
+                          }
+                        },
+                        {
+                          "id": "sec-graph-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "graph",
+                              "title": "Graph"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-graph-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "git-graph"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-status-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "status",
+                              "title": "Spaces Status"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-status-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "spaces-glow"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-changes-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "changes",
+                              "title": "Changes"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-changes-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "changes-vs"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-agents-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "agents",
+                              "title": "Agents"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-agents-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "agents"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-blueprint-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "blueprint",
+                              "title": "Blueprint"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-blueprint-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "blueprint",
+                            "props": {
+                              "panel": true
+                            }
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-servers-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "servers",
+                              "title": "Servers"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-servers-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "servers"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-utilization-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "utilization",
+                              "title": "Utilization"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-utilization-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "sysmon"
+                          },
+                          "hidden": true
+                        },
+                        {
+                          "id": "sec-extensions-head",
+                          "type": "block",
+                          "content": {
+                            "mod": "vsections",
+                            "props": {
+                              "section": "extensions",
+                              "title": "Extensions"
+                            }
+                          },
+                          "size": {
+                            "px": 26
+                          }
+                        },
+                        {
+                          "id": "sec-extensions-body",
+                          "type": "block",
+                          "content": {
+                            "mod": "extensions"
+                          },
+                          "hidden": true
+                        }
+                      ],
+                      "size": {
+                        "weight": 0.800000011920929
+                      },
+                      "resizable": false
+                    }
+                  ]
+                }
+              ],
+              "size": {
+                "px": 284
+              },
+              "min": 200,
+              "max": 900
+            },
+            {
+              "id": "editor",
+              "type": "column",
+              "children": [
+                {
+                  "id": "tabs",
+                  "type": "block",
+                  "content": {
+                    "mod": "tabs-vs"
+                  },
+                  "size": {
+                    "px": 32
+                  }
+                },
+                {
+                  "id": "file-tabs",
+                  "type": "block",
+                  "content": {
+                    "mod": "session-files"
+                  },
+                  "size": {
+                    "px": 34
+                  }
+                },
+                {
+                  "id": "work",
+                  "type": "stack",
+                  "children": [
+                    {
+                      "id": "main",
+                      "type": "block",
+                      "content": {
+                        "tab": "active",
+                        "pane": {
+                          "header": {
+                            "content": {
+                              "mod": "pane"
+                            },
+                            "reveal": "always",
+                            "height": 28,
+                            "position": "top"
+                          },
+                          "background": "background",
+                          "border": {
+                            "width": 1,
+                            "color": "border"
+                          },
+                          "focus": {
+                            "width": 1,
+                            "color": "accent"
+                          },
+                          "radius": 0,
+                          "gap": 1
+                        }
+                      }
+                    },
+                    {
+                      "id": "file-view",
+                      "type": "block",
+                      "content": {
+                        "mod": "editor",
+                        "props": {
+                          "session": true
+                        }
+                      }
+                    },
+                    {
+                      "id": "chat",
+                      "type": "block",
+                      "content": {
+                        "mod": "chat"
+                      }
+                    }
+                  ],
+                  "active": "chat"
+                }
+              ],
+              "background": "canvas"
+            },
+            {
+              "id": "tools",
+              "type": "column",
+              "children": [
+                {
+                  "id": "tool-sideChat-head",
+                  "type": "block",
+                  "content": {
+                    "mod": "tool-header",
+                    "props": {
+                      "tool": "sideChat"
+                    }
+                  },
+                  "size": {
+                    "px": 28
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-sideChat",
+                  "type": "block",
+                  "content": {
+                    "mod": "side-chat"
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-browser-head",
+                  "type": "block",
+                  "content": {
+                    "mod": "tool-header",
+                    "props": {
+                      "tool": "browser"
+                    }
+                  },
+                  "size": {
+                    "px": 28
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-browser",
+                  "type": "block",
+                  "content": {
+                    "mod": "browser"
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-terminal-head",
+                  "type": "block",
+                  "content": {
+                    "mod": "tool-header",
+                    "props": {
+                      "tool": "terminal"
+                    }
+                  },
+                  "size": {
+                    "px": 28
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-terminal",
+                  "type": "block",
+                  "content": {
+                    "mod": "tool-header",
+                    "props": {
+                      "tool": "terminal",
+                      "empty": true
+                    }
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-canvases-head",
+                  "type": "block",
+                  "content": {
+                    "mod": "tool-header",
+                    "props": {
+                      "tool": "canvases"
+                    }
+                  },
+                  "size": {
+                    "px": 28
+                  },
+                  "hidden": true
+                },
+                {
+                  "id": "tool-canvases",
+                  "type": "block",
+                  "content": {
+                    "mod": "canvases"
+                  },
+                  "hidden": true
+                }
+              ],
+              "size": {
+                "px": 231
+              },
+              "min": 120,
+              "hidden": true,
+              "divider": {
+                "width": 1,
+                "color": "border"
+              }
+            }
+          ],
+          "divider": {
+            "width": 1,
+            "color": "border"
+          }
+        },
+        {
+          "id": "status",
+          "type": "block",
+          "content": {
+            "mod": "usage-bar",
+            "props": {
+              "workspaceStatus": true,
+              "only": [
+                "claude"
+              ]
+            }
+          },
+          "size": {
+            "px": 24
+          }
+        },
+        {
+          "id": "copy-on-select",
+          "type": "block",
+          "content": {
+            "mod": "copy-on-select"
+          },
+          "size": {
+            "px": 0
+          }
+        }
+      ],
+      "background": "chrome",
+      "theme": {
+        "light": "ember-light",
+        "dark": "ember-dark"
+      },
+      "terminal_padding": [
+        10,
+        8
+      ],
+      "divider": {
+        "width": 1,
+        "color": "border"
+      },
+      "titlebar": "none",
+      "traffic_lights": [
+        12,
+        11
+      ],
+      "preview": "layouts/vscode.svg"
+    }
+  ],
+  "theme": {
+    "light": "ember-light",
+    "dark": "ember-dark"
+  },
+  "colors": {
+    "selection": "#e0903a59"
+  },
+  "divider": {
+    "width": 1,
+    "color": "border"
+  }
+}

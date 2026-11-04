@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- The browser window's own chrome: tab strip, back/forward/reload and the address box.
+     Colors come from Herdr's theme (sent by the pane). Pages live in views below it. -->
+<html><head><meta charset="utf-8"><title>Herdr browser</title>
+<style>
+:root { --bg:#1e1e1e; --chrome:#181818; --fg:#e6e6e6; --muted:#9a9a9a; --border:#2e2e2e; --raised:#2a2a2a; --hover:#333; --accent:#4c8dff; }
+* { box-sizing: border-box; }
+html, body { margin:0; height:72px; overflow:hidden; background:var(--chrome); color:var(--fg); font:12.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; user-select:none; }
+#tabs { height:34px; display:flex; align-items:center; gap:3px; padding:0 6px; overflow-x:auto; scrollbar-width:none; }
+.tab { flex:0 1 200px; min-width:60px; height:26px; display:flex; align-items:center; gap:6px; padding:0 4px 0 10px; border-radius:7px; color:var(--muted); cursor:default; border:1px solid transparent; }
+.tab:hover { background:var(--hover); }
+.tab.on { background:var(--raised); color:var(--fg); border-color:var(--border); }
+.tab .t { flex:1; min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.tab .x { width:18px; height:18px; border-radius:4px; display:grid; place-items:center; color:var(--muted); }
+.tab .x:hover { background:var(--border); color:var(--fg); }
+.tab.loading .t::before { content:"● "; color:var(--accent); }
+#nav { height:38px; display:flex; align-items:center; gap:2px; padding:0 6px 4px; border-bottom:1px solid var(--border); }
+button { width:28px; height:26px; border:0; border-radius:6px; background:none; color:var(--muted); font-size:16px; line-height:1; }
+button:hover:not(:disabled) { background:var(--hover); color:var(--fg); }
+button:disabled { opacity:.35; }
+#url { flex:1; min-width:0; height:28px; margin-left:4px; padding:0 12px; border-radius:14px; border:1px solid var(--border); background:var(--bg); color:var(--fg); font:inherit; outline:none; user-select:text; }
+#url:focus { border-color:var(--accent); }
+</style></head>
+<body>
+<div id="tabs"></div>
+<div id="nav">
+  <button id="back" title="Back (⌘[)">‹</button>
+  <button id="fwd" title="Forward (⌘])">›</button>
+  <button id="reload" title="Reload (⌘R)">⟳</button>
+  <input id="url" placeholder="Search Google or type a URL" spellcheck="false">
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const url = $("url");
+let editing = false;
+$("back").onclick = () => shell.cmd("back");
+$("fwd").onclick = () => shell.cmd("forward");
+$("reload").onclick = () => shell.cmd("reload");
+url.onfocus = () => { editing = true; setTimeout(() => url.select(), 0); };
+url.onblur = () => { editing = false; };
+url.onkeydown = (e) => {
+  if (e.key === "Enter" && url.value.trim()) { shell.cmd("nav", url.value); url.blur(); }
+  if (e.key === "Escape") url.blur();
+};
+shell.on("focus-url", () => url.focus());
+shell.on("colors", (c) => { for (const [k, v] of Object.entries(c)) if (v) document.documentElement.style.setProperty(`--${k}`, v); });
+shell.on("state", (s) => {
+  const strip = $("tabs");
+  strip.replaceChildren(...s.tabs.map((t) => {
+    const el = document.createElement("div");
+    el.className = `tab${t.id === s.active ? " on" : ""}${t.loading ? " loading" : ""}`;
+    el.title = t.url;
+    el.innerHTML = `<span class="t"></span><span class="x">×</span>`;
+    el.querySelector(".t").textContent = t.title || t.url || "New tab";
+    el.onmousedown = (e) => { if (e.button === 1) shell.cmd("closeTab", t.id); else shell.cmd("activate", t.id); };
+    el.querySelector(".x").onmousedown = (e) => { e.stopPropagation(); shell.cmd("closeTab", t.id); };
+    return el;
+  }));
+  const plus = document.createElement("button");
+  plus.textContent = "+"; plus.title = "New tab (⌘T)"; plus.onclick = () => shell.cmd("newTab");
+  strip.append(plus);
+  $("back").disabled = !s.canBack; $("fwd").disabled = !s.canForward;
+  if (!editing) url.value = s.url;
+});
+</script>
+</body></html>
