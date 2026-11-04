@@ -1216,8 +1216,15 @@ export default class Chat extends View {
               const items = this.slashMatches();
               if (items.length && ["up", "down", "enter", "tab", "escape"].includes(e.key) && !e.modifiers.shift && !e.modifiers.platform) {
                 const sel = Math.min(this.slash.sel, items.length - 1);
-                if (e.key === "up") this.slash.sel = (sel - 1 + items.length) % items.length;
-                else if (e.key === "down") this.slash.sel = (sel + 1) % items.length;
+                if (e.key === "up" || e.key === "down") {
+                  // The highlighted command goes into the box as you move (2026-11-05). set_value fires no
+                  // "change", so the menu keeps the list filtered by what was typed.
+                  this.slash.sel = (sel + (e.key === "up" ? -1 : 1) + items.length) % items.length;
+                  const v = `/${items[this.slash.sel].name}`;
+                  this.input.set_value(v);
+                  try { this.input.set_selected_range({ start: v.length, end: v.length }); } catch (_) {}
+                  if (this.inputTab) this.saveDraft(this.inputTab, v);
+                }
                 else if (e.key === "escape") this.slash = null;
                 else this.pickCommand(items[sel]);
                 cx.stop_propagation();
