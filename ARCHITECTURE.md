@@ -133,6 +133,12 @@ stay in step, because mods can't import each other's code.
 - **Tab names:** `spaces-tree` renames a Claude tab still under a default name ("Claude Code",
   a number) to its terminal title, Claude's session title, once it has one. Names the person
   gave are left alone. Dragging a session row within its space reorders it (`tab.move`).
+- **After a reboot (`claude-resume`, a 0 px block beside `copy-on-select`):** Herdr keeps terminals
+  across a reboot but gives each a new shell in place of its lost program, so every Claude tab came
+  back as bash (2026-11-04). While Claude runs, the mod labels its terminal
+  `claude.resume="<transcript id> <shell pid>"`; a terminal later sitting at a shell with another
+  pid gets `claude --dangerously-skip-permissions -r <id>` typed in. Quitting Claude yourself
+  leaves the same shell, so nothing happens. This computer's terminals only.
 - **Right-hand tools:** `tabs-vs` rebuilds the tools column with `layout.set`, merging the
   click state from `layouts/.state/vscode.json` first so dragged sizes stay. An open canvas is
   an Electron window over its pane (`mods/browser/shell`); it keeps the pane's fixed edge when

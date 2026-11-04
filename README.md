@@ -105,6 +105,7 @@ worktree. The card then shows how that agent is doing.
 | `vs-chrome`, `vsections`, `tabs-vs`, `session-files`, `tool-header` | Title bar, activity bar, side bar sections, session and file tabs, tool headers |
 | `spaces-tree`, `session-menu` | Spaces with their sessions; right-click menu |
 | `chat`, `side-chat` | A Claude Code session as a chat, read from its transcript |
+| `claude-resume` | After a reboot, resumes each Claude session in the terminal it ran in |
 | `canvases`, `browser` | Published claude.ai pages, and the Electron browser that shows them |
 | `files-plus`, `editor`, `markdown-browser`, `term-search` | Explorer, code editor, Markdown list and preview, search |
 | `changes-vs`, `git-graph`, `blueprint`, `servers`, `sysmon`, `quota`, `usage-bar` | Git changes and graph, an agent's flow, servers, system load, Claude usage |
