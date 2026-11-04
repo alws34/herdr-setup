@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Herdr mock</title>
-<!-- A copy of the vscode layout (Ember theme) with made-up sessions, for the README.
+<!-- Mocks of the vscode layout's screens (Ember theme) with made-up sessions, for the README.
+     Open with #chat, #tools, #editor or #board, plus -light for the light theme.
      Colors are themes/ember-dark.json and ember-light.json; sizes follow a real 2x shot. -->
 <style>
   html.dark {
@@ -108,6 +109,77 @@
 
   .status { height:26px; background:var(--chrome); border-top:1px solid var(--border); padding:0 12px; gap:18px; font-size:12.5px; color:var(--muted); }
   .status .row { gap:6px; } .status svg.i { width:13px; height:13px; }
+  /* screens: one shown at a time, picked by the URL hash (#chat, #tools, #editor, #board, plus -light) */
+  .body { position:relative; }
+  [data-screen] { display:none; } [data-screen].shown { display:flex; }
+
+  /* terminal + right-hand tools */
+  .split { flex:1; display:flex; min-height:0; }
+  .term-pane { flex:1; position:relative; padding:14px 18px; font:12.5px/20px "SF Mono", "JetBrains Mono", Menlo, monospace; color:var(--fg); white-space:pre; overflow:hidden; }
+  .term-pane .d { color:var(--dim); } .term-pane .a { color:var(--accent); } .term-pane .g { color:var(--add); } .term-pane .u { color:var(--muted); }
+  .term-pane .bottom { position:absolute; left:18px; right:18px; bottom:12px; }
+  .term-pane .box2 { border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--dim); }
+  .toolcol { width:500px; border-left:1px solid var(--border); display:flex; flex-direction:column; background:var(--bg); }
+  .thead { height:34px; padding:0 12px; gap:8px; background:var(--chrome); border-bottom:1px solid var(--border); font-size:12.5px; color:var(--fg); }
+  .thead .btns { margin-left:auto; gap:14px; color:var(--dim); }
+  .thead + * { border-bottom:1px solid var(--border); }
+  .cvl { padding-bottom:8px; }
+  .cvl .lb { padding:12px 12px 4px; font-size:10.5px; font-weight:600; color:var(--dim); letter-spacing:.02em; }
+  .cvl .who { padding:6px 14px 2px; font-size:11.5px; color:var(--muted); }
+  .cv { height:30px; margin:0 6px; padding:0 8px; gap:8px; border-radius:6px; font-size:12.5px; }
+  .cv .ic { color:var(--dim); } .cv .ag { margin-left:auto; color:var(--dim); font-size:11px; }
+  .cv.on { background:var(--selected); } .cv.on .ic { color:var(--accent); }
+  .sidechat { flex:1; display:flex; flex-direction:column; padding:6px 0 0; min-height:0; }
+  .sidechat .col { width:auto; padding:0 18px; }
+  .sidechat .composer { width:auto; padding:0 18px 4px; }
+  .sidechat .composer .in { height:44px; font-size:14px; }
+
+  /* editor */
+  .ftabs { height:36px; padding:0 8px; gap:2px; border-bottom:1px solid var(--border); }
+  .ft { height:28px; padding:0 12px; gap:8px; border-radius:6px; font-size:13px; color:var(--muted); }
+  .ft.on { background:var(--raised); color:var(--fg); }
+  .ft .m { width:7px; height:7px; border-radius:4px; background:var(--fg); opacity:.7; }
+  .modes { margin-left:auto; padding:2px; gap:2px; border-radius:7px; background:var(--raised); }
+  .modes span { padding:3px 10px; border-radius:5px; font-size:12px; color:var(--muted); }
+  .modes span.on { background:var(--bg); color:var(--fg); }
+  .panes { flex:1; display:flex; min-height:0; }
+  .code { flex:1; display:flex; font:12.5px/21px "SF Mono", "JetBrains Mono", Menlo, monospace; padding:12px 0; border-right:1px solid var(--border); overflow:hidden; }
+  .code .ln { width:52px; text-align:right; padding-right:16px; color:var(--dim); white-space:pre; opacity:.7; }
+  .code .src { white-space:pre; color:var(--fg); }
+  .code .h { color:var(--accent); font-weight:600; } .code .li { color:var(--dim); } .code .cur { background:var(--hover); display:block; }
+  .prev { flex:1; padding:22px 36px; overflow:hidden; font-size:14px; line-height:23px; }
+  .prev h1 { font-size:24px; line-height:32px; font-weight:600; margin-bottom:6px; }
+  .prev h2 { font-size:17px; font-weight:600; margin:18px 0 6px; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .prev p { color:var(--muted); } .prev ul { padding-left:22px; } .prev li { padding:2px 0; }
+  .prev code { font-family:"SF Mono", Menlo, monospace; font-size:12.5px; background:var(--surface); border-radius:4px; padding:1px 5px; }
+
+  /* ClickUp board, opened over the window */
+  .board { position:absolute; inset:0 0 0 48px; background:var(--bg); }
+  .bside { width:236px; background:var(--chrome); border-right:1px solid var(--border); padding:6px; display:flex; flex-direction:column; gap:1px; font-size:12.5px; }
+  .bside .r { height:28px; padding:0 8px; gap:8px; border-radius:6px; color:var(--muted); }
+  .bside .r.on { background:var(--selected); color:var(--fg); }
+  .bside .team { padding:14px 10px 4px; font-size:10.5px; font-weight:600; color:var(--dim); }
+  .bside .sq { width:14px; height:14px; border-radius:4px; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .bmain { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .bhead { height:52px; padding:0 18px; gap:14px; border-bottom:1px solid var(--border); }
+  .bhead .ttl { font-size:15px; font-weight:600; } .bhead .crumb { color:var(--dim); font-weight:400; }
+  .bhead .sw { padding:2px; gap:2px; border-radius:7px; background:var(--raised); font-size:12.5px; }
+  .bhead .sw span { padding:3px 12px; border-radius:5px; color:var(--muted); } .bhead .sw span.on { background:var(--bg); color:var(--fg); }
+  .bhead .search { margin-left:auto; width:220px; height:28px; border-radius:6px; background:var(--surface); border:1px solid var(--border); padding:0 10px; gap:8px; color:var(--dim); font-size:12.5px; }
+  .lanes { flex:1; display:flex; gap:10px; padding:14px 18px; min-height:0; }
+  .lane { width:282px; flex:none; display:flex; flex-direction:column; gap:6px; padding:6px; border-radius:10px; background:var(--surface); border:1px solid var(--border); }
+  .lane .lh { height:30px; padding:0 4px; gap:8px; }
+  .pill { padding:2px 8px; border-radius:5px; font-size:11px; font-weight:600; letter-spacing:.02em; color:#fff; }
+  .lane .cnt { font-size:12px; color:var(--dim); } .lane .add { margin-left:auto; color:var(--dim); padding:0 6px; }
+  .card { padding:10px 12px; border-radius:8px; background:var(--raised); border:1px solid var(--border); display:flex; flex-direction:column; gap:8px; }
+  .card .tt { gap:7px; align-items:flex-start; font-size:13px; line-height:18px; }
+  .card .sd { width:8px; height:8px; border-radius:4px; margin-top:5px; flex:none; }
+  .card .lbs { gap:5px; flex-wrap:wrap; }
+  .card .lbl { height:20px; padding:0 7px; gap:5px; border-radius:10px; border:1px solid var(--border); font-size:10.5px; color:var(--muted); }
+  .card .lbl i { width:7px; height:7px; border-radius:4px; }
+  .card .meta { height:22px; gap:8px; font-size:11.5px; color:var(--dim); }
+  .card .who { width:20px; height:20px; border-radius:10px; color:#1d1208; font-size:9.5px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .card .agent { margin-left:auto; height:20px; padding:0 7px; gap:5px; border-radius:5px; border:1px solid var(--border); font-size:11px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -188,7 +260,7 @@
       <div class="sec c row"><svg class="i chev" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>EXTENSIONS</div>
     </div>
 
-    <div class="ed">
+    <div class="ed" data-screen="chat">
       <div class="tabs row">
         <div class="tab row"><span class="mono">&gt;_</span>zsh</div>
         <div class="tab row"><svg class="crit"><use href="#crit"/></svg>Release notes for v2.4</div>
@@ -235,6 +307,204 @@
         </div>
       </div>
     </div>
+
+    <!-- terminal view, with Canvases and Side chat open on the right -->
+    <div class="ed" data-screen="tools">
+      <div class="tabs row">
+        <div class="tab row"><span class="mono">&gt;_</span>zsh</div>
+        <div class="tab row on"><svg class="crit"><use href="#crit"/></svg> Backfill the events table<span class="x">×</span></div>
+        <div class="tab row"><svg class="crit"><use href="#crit"/></svg> Review dbt models</div>
+        <div class="tools row">
+          <span class="row" style="color:var(--fg)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Side chat</span>
+          <span class="row"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Chrome</span>
+          <span class="row"><span class="mono">&gt;_</span>Terminal</span>
+          <span class="row" style="color:var(--fg)"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="currentColor"/></svg>Canvases</span>
+        </div>
+      </div>
+      <div class="seg row"><span>Chat</span><span class="on">Terminal</span></div>
+      <div class="split">
+        <div class="term-pane"><span class="u">&gt; Backfill events for October in daily batches. Stop if a batch fails.</span>
+
+<span class="a">⏺</span> I'll run it one day at a time, so a failure only costs that day.
+
+<span class="a">⏺</span> Bash(python -m backfill --from 2026-10-01 --to 2026-10-31 --batch day)
+  <span class="d">└</span>  2026-10-01  <span class="g">✓</span>  48,212 rows   0:58
+     2026-10-02  <span class="g">✓</span>  51,907 rows   1:02
+     2026-10-03  <span class="g">✓</span>  47,330 rows   0:55
+     2026-10-04  <span class="g">✓</span>  39,118 rows   0:47
+     2026-10-05  <span class="g">✓</span>  36,524 rows   0:44
+     2026-10-06  <span class="g">✓</span>  52,861 rows   1:04
+     2026-10-07  <span class="g">✓</span>  53,409 rows   1:05
+     2026-10-08  <span class="g">✓</span>  50,776 rows   1:01
+     2026-10-09  <span class="a">…</span>  running
+     <span class="d">+22 days to go</span>
+
+<span class="a">⏺</span> Published the progress as a canvas, so you can follow it there.
+
+<span class="a">✻ Backfilling…</span> <span class="d">(9m 12s · ↓ 3.1k tokens · esc to interrupt)</span>
+<div class="bottom"><div class="box2">&gt; </div><span class="d">  ⏵⏵ accept edits on (shift+tab to cycle)</span></div></div>
+        <div class="toolcol">
+          <div class="thead row"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="4" y="4" width="16" height="16" rx="2" fill="currentColor"/></svg>Canvases<span class="btns row"><span>⤢</span><span>×</span></span></div>
+          <div class="cvl">
+            <div class="lb">THIS SESSION</div>
+            <div class="cv row on"><span class="ic">▦</span>Events backfill progress<span class="ag">3m</span></div>
+            <div class="cv row"><span class="ic">▦</span>Row counts by day, September vs October<span class="ag">1h</span></div>
+            <div class="lb">OTHER SESSIONS</div>
+            <div class="who">Review dbt models</div>
+            <div class="cv row"><span class="ic">▦</span>dbt lineage map<span class="ag">2h</span></div>
+            <div class="cv row"><span class="ic">▦</span>Models without tests<span class="ag">2h</span></div>
+          </div>
+          <div class="thead row"><svg class="i" viewBox="0 0 24 24" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/></svg>Side chat<span class="btns row"><span>⤢</span><span>×</span></span></div>
+          <div class="sidechat">
+            <div class="col">
+              <div class="user"><div>How long until the backfill is done?</div></div>
+              <div class="md">About 22 minutes. 8 of 31 days are in, at roughly a minute each, and the weekdays run a little slower than weekends.</div>
+              <div class="user"><div>Ping me here if a day fails.</div></div>
+              <div class="md">Will do. A failed day stops the run, and I'll say which day and why.</div>
+            </div>
+            <div class="composer">
+              <div class="in row"><span style="font-size:18px">+</span>Ask on the side…</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- a file open next to its session: Markdown in Split mode -->
+    <div class="ed" data-screen="editor">
+      <div class="tabs row">
+        <div class="tab row"><span class="mono">&gt;_</span>zsh</div>
+        <div class="tab row"><svg class="crit"><use href="#crit"/></svg> Fix checkout race condition</div>
+        <div class="tab row on"><svg class="crit"><use href="#crit"/></svg> Release notes for v2.4<span class="x">×</span></div>
+        <div class="tools row">
+          <span class="row"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>Side chat</span>
+          <span class="row"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Chrome</span>
+          <span class="row"><span class="mono">&gt;_</span>Terminal</span>
+          <span class="row"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="currentColor"/></svg>Canvases</span>
+        </div>
+      </div>
+      <div class="ftabs row">
+        <div class="ft row"><span class="mono">&gt;_</span>Terminal</div>
+        <div class="ft row on">RELEASE_NOTES.md<span class="m"></span></div>
+        <div class="ft row">CHANGELOG.md</div>
+        <div class="ft row">package.json</div>
+        <div class="modes row"><span>Code</span><span class="on">Split</span><span>Preview</span></div>
+      </div>
+      <div class="panes">
+        <div class="code"><div class="ln">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</div><div class="src"><span class="h"># Acme Web 2.4</span>
+
+Released November 4. Checkout is faster and more reliable,
+and saved carts now follow you between devices.
+
+<span class="h">## New</span>
+
+<span class="li">-</span> Saved carts sync across devices once you sign in.
+<span class="li">-</span> Apple Pay and Google Pay on the payment step.
+<span class="li">-</span> Order history shows each order's delivery status.
+
+<span class="h">## Fixed</span>
+
+<span class="li">-</span> The cart total no longer shows a stale amount after a
+  quick change of quantity.
+<span class="cur"><span class="li">-</span> Discount codes with lowercase letters now apply.</span><span class="li">-</span> The address form keeps what you typed when a field fails.
+
+<span class="h">## Upgrading</span>
+
+Run `npm run migrate` once. Carts saved before 2.4 are
+moved over the first time each customer signs in.
+</div></div>
+        <div class="prev">
+          <h1>Acme Web 2.4</h1>
+          <p>Released November 4. Checkout is faster and more reliable, and saved carts now follow you between devices.</p>
+          <h2>New</h2>
+          <ul><li>Saved carts sync across devices once you sign in.</li><li>Apple Pay and Google Pay on the payment step.</li><li>Order history shows each order's delivery status.</li></ul>
+          <h2>Fixed</h2>
+          <ul><li>The cart total no longer shows a stale amount after a quick change of quantity.</li><li>Discount codes with lowercase letters now apply.</li><li>The address form keeps what you typed when a field fails.</li></ul>
+          <h2>Upgrading</h2>
+          <p style="color:var(--fg)">Run <code>npm run migrate</code> once. Carts saved before 2.4 are moved over the first time each customer signs in.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- the ClickUp board, opened over the window from the activity bar -->
+    <div class="board" data-screen="board">
+      <div class="bside">
+        <div class="r row"><span style="color:var(--accent)">●</span>My tasks</div>
+        <div class="team">ACME</div>
+        <div class="r row"><span style="color:var(--dim);width:10px">▾</span><span class="sq" style="background:#e8806e">W</span><span style="color:var(--fg)">Web</span></div>
+        <div class="r row" style="padding-left:26px"><span style="color:var(--dim)">≡</span>Sprint 13</div>
+        <div class="r row on" style="padding-left:26px"><span style="color:var(--dim)">≡</span>Sprint 14</div>
+        <div class="r row" style="padding-left:26px"><span style="color:var(--dim)">≡</span>Bugs</div>
+        <div class="r row"><span style="color:var(--dim);width:10px">▸</span><span class="sq" style="background:#86aedb">D</span><span style="color:var(--fg)">Data</span></div>
+        <div class="r row"><span style="color:var(--dim);width:10px">▸</span><span class="sq" style="background:#82c4b8">M</span><span style="color:var(--fg)">Mobile</span></div>
+      </div>
+      <div class="bmain">
+        <div class="bhead row">
+          <span class="ttl"><span class="crumb">Web › </span>Sprint 14</span>
+          <span class="sw row"><span class="on">Board</span><span>List</span></span>
+          <span class="search row"><svg class="i" viewBox="0 0 24 24" style="width:13px;height:13px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search tasks</span>
+          <span style="color:var(--dim)">↻</span>
+        </div>
+        <div class="lanes">
+          <div class="lane">
+            <div class="lh row"><span class="pill" style="background:#87909e">TO DO</span><span class="cnt">3</span><span class="add">+</span></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#87909e"></span>Show delivery status in order history</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#82c4b8"></i>frontend</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a4)">DK</span>Nov 7<span>⚑</span><span class="agent row">Agent</span></div></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#87909e"></span>Keep address form input when validation fails</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#e8806e"></i>bug</span><span class="lbl row"><i style="background:#82c4b8"></i>frontend</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a2)">RS</span>Nov 8<span class="agent row">Agent</span></div></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#87909e"></span>Migrate saved carts on first sign-in</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#f0c068"></i>backend</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a5)">AL</span>Nov 12<span class="agent row">Agent</span></div></div>
+          </div>
+          <div class="lane">
+            <div class="lh row"><span class="pill" style="background:#4194f6">IN PROGRESS</span><span class="cnt">2</span><span class="add">+</span></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#4194f6"></span>Fix flaky checkout test on CI</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#e8806e"></i>bug</span><span class="lbl row"><i style="background:#d29bc0"></i>tests</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a5)">AL</span><span style="color:var(--blocked)">Today</span><span>⚑</span><span class="agent row"><span class="dot done" style="box-shadow:none;margin:0"></span>Done</span></div></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#4194f6"></span>Apple Pay and Google Pay on the payment step</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#82c4b8"></i>frontend</span><span class="lbl row"><i style="background:#f0c068"></i>backend</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a4)">DK</span>Nov 6<span class="agent row"><span class="spin" style="width:9px;height:9px;margin:0"></span>Working</span></div></div>
+          </div>
+          <div class="lane">
+            <div class="lh row"><span class="pill" style="background:#f8ae00">IN REVIEW</span><span class="cnt">1</span><span class="add">+</span></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#f8ae00"></span>Apply discount codes regardless of case</div>
+              <div class="lbs row"><span class="lbl row"><i style="background:#e8806e"></i>bug</span></div>
+              <div class="meta row"><span class="who" style="background:var(--a2)">RS</span>Nov 5<span class="agent row"><span class="dot blocked" style="box-shadow:none;margin:0"></span>Needs you</span></div></div>
+          </div>
+          <div class="lane">
+            <div class="lh row"><span class="pill" style="background:#3db88b">COMPLETE</span><span class="cnt">2</span><span class="add">+</span></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#3db88b"></span>Sync saved carts across devices</div>
+              <div class="meta row"><span class="who" style="background:var(--a5)">AL</span>Nov 3</div></div>
+            <div class="card"><div class="tt row"><span class="sd" style="background:#3db88b"></span>Write 2.4 release notes</div>
+              <div class="meta row"><span class="who" style="background:var(--a4)">DK</span>Nov 4</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="status row">
@@ -245,5 +515,21 @@
     <span style="margin-left:auto">⌘ Shift P  commands</span>
   </div>
 </div>
+<script>
+  // #<screen>[-light]: which screen to show, which session is selected, and the command box text.
+  const [screen, theme] = (location.hash.slice(1) || "chat").split("-");
+  const SCREENS = { chat: ["Fix checkout race condition", "acme-web"], tools: ["Backfill the events table", "data-platform"],
+                    editor: ["Release notes for v2.4", "acme-web"], board: ["Fix checkout race condition", "acme-web"] };
+  const [sel, space] = SCREENS[screen];
+  document.documentElement.className = theme || "dark";
+  document.querySelector(`[data-screen="${screen}"]`).classList.add("shown");
+  document.querySelector(".cmd").lastChild.textContent = space;
+  for (const r of document.querySelectorAll(".ss")) {
+    const on = r.querySelector(".t").textContent === sel;
+    r.classList.toggle("sel", on);
+    if (on) r.querySelector(".dot")?.remove();  // a session you're looking at has nothing to tell you
+  }
+  for (const r of document.querySelectorAll(".sp")) r.classList.toggle("sel", r.textContent.includes(space));
+</script>
 </body>
 </html>

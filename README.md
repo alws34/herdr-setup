@@ -7,18 +7,14 @@
 Alon's setup of the [Herdr](https://herdr.dev) desktop app: every session is a terminal you can
 also read and answer as a chat, grouped by project, with the tools each one needs beside it.
 
-![herdr-app 0.1.13](https://img.shields.io/badge/herdr--app-0.1.13-f0a04b?style=flat-square&labelColor=1d1a17)
-![macOS](https://img.shields.io/badge/macOS-only-e6dfd6?style=flat-square&labelColor=1d1a17)
-![theme](https://img.shields.io/badge/theme-Ember-a3c46e?style=flat-square&labelColor=1d1a17)
-
 </div>
 
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="docs/screenshot-light.png">
-  <img alt="The vscode layout: spaces and sessions on the left, a Claude session shown as a chat in the middle, system load and Claude usage in the title bar" src="docs/screenshot-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/chat-light.png">
+  <img alt="The vscode layout: spaces and sessions on the left, a Claude session shown as a chat in the middle, system load and Claude usage in the title bar" src="docs/screens/chat-dark.png">
 </picture>
 
-<sub>A mock with made-up projects and sessions, drawn to match the real window (`docs/screenshot.html`).</sub>
+<sub>All screenshots here are mocks with made-up projects and sessions, drawn to match the real window (`docs/screenshot.html`).</sub>
 
 ## What you get
 
@@ -51,12 +47,40 @@ Ember theme (amber, light and dark).
 
 Any of them can move into the main area and back.
 
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/tools-light.png">
+  <img alt="A session in its terminal view, with Canvases listing the pages it published and a side chat open on the right" src="docs/screens/tools-dark.png">
+</picture>
+
+### Files next to their session
+
+- Click a file in Explorer or the Markdown list and it opens as a tab **under the session** that
+  you're in. Switch sessions and their files switch with them.
+- The editor follows the disk while you haven't typed, saves with ⌘S, and marks unsaved files.
+- Markdown opens in **Code, Split or Preview**, like VS Code (⌘⇧V toggles Preview).
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/editor-light.png">
+  <img alt="A Markdown file open under its session, in Split mode: source on the left, the rendered page on the right" src="docs/screens/editor-dark.png">
+</picture>
+
 ### Around the edges
 
 - **Title bar:** a command box, CPU, GPU, memory and network, Claude usage and quota.
 - **Side bar sections:** Explorer, Search, Markdown, Git changes and graph, Agents, Blueprint
   (an agent's flow as a diagram), Utilization, Extensions. Drag to reorder, collapse, resize.
 - **Boards:** ClickUp and Linear managed in place; start an agent straight from a task.
+
+### ClickUp, without leaving the window
+
+Your spaces and lists, each as a **Board** or a **List**. Drag a card to change its status, click it
+to edit everything in a side panel, or press **Agent** to start a Claude session on it in its own
+worktree. The card then shows how that agent is doing.
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/board-light.png">
+  <img alt="The ClickUp board: a column per status, cards with labels, assignee, due date and an Agent button showing each agent's state" src="docs/screens/board-dark.png">
+</picture>
 
 ## What's here
 
@@ -68,7 +92,7 @@ Any of them can move into the main area and back.
 | `keys.json` | Keyboard shortcuts |
 | `settings.json` | Zoom, font size, sounds |
 | `backgrounds/`, `icons/` | Images the layouts and mods use |
-| `docs/` | The README's screenshots and the page they're drawn from |
+| `docs/` | The README's screenshots (`screens/`) and the page they're drawn from |
 | `CLAUDE.md` | Rules for Claude sessions editing this folder |
 | `ARCHITECTURE.md` | How the `vscode` layout fits together, and the shared-state keys mods talk through |
 | `AGENTS.md`, `*.d.ts`, `frame/` | Herdr's own manual and API types. The app rewrites them; don't edit |
@@ -129,6 +153,6 @@ Read `CLAUDE.md` first. In short:
 - After changing a mod, run `herdr-app check ~/.config/herdr-app/mods/<name>`.
 - `herdr-app status` shows errors; `herdr-app shot x.png` saves the window's last frame.
 - If a layout breaks the window, `ctrl-alt-shift-escape` gets you out.
-- To redraw the README's screenshots after editing `docs/screenshot.html`, render it at
-  1568×998 with Chrome headless (`--force-device-scale-factor=2`), once as is and once with
-  `class="light"` on `<html>`.
+- To redraw the README's screenshots after editing `docs/screenshot.html`, render
+  `screenshot.html#<screen>` (`chat`, `tools`, `editor`, `board`, each also with `-light`) at
+  1568×998 with Chrome headless (`--force-device-scale-factor=2`) into `docs/screens/`.
