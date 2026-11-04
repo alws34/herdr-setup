@@ -414,9 +414,10 @@ export default class Spaces extends View {
         .when(pinned.includes(tab.id), (el) => el.child(svg("mods/workspace-chrome/pin.svg").size(11).flex_none().text_color(t.dim)))
         .when(unread.includes(tab.id), (el) => el.child(div().size(6).rounded(3).flex_none().bg(t.accent)))
         .when(tab.status === "working", (el) => el.child(svg("mods/workspace-chrome/spinner.svg").size(11).flex_none().text_color(t.working).spin(900)))
-        // Waiting for the person: the dot breathes (asked 2026-11-04), natively, no re-render.
+        // Only a session stopped on a question or permission for the person breathes (asked
+        // 2026-11-04); "done" (finished, not looked at yet) stays a steady dot, or every idle one pulsed.
         .when(tab.status === "blocked" || tab.status === "done", (el) => el.child(div().size(6).rounded(3).flex_none().bg(t[tab.status])
-          .loop("opacity", { from: 0.25, to: 1, period: 2400 })));
+          .when(tab.status === "blocked", (d) => d.loop("opacity", { from: 0.25, to: 1, period: 2400 }))));
     });
   }
 

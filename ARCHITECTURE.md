@@ -125,8 +125,9 @@ stay in step, because mods can't import each other's code.
   newest transcript and showed another session (2026-11-04).
 - **Chat history:** only the newest rows are built; scrolling up near the top loads more
   (the "Show earlier messages" button does the same).
-- **Waiting for you:** the status dot of a `done`/`blocked` session breathes (`.loop("opacity")`)
-  in `spaces-tree` and `tabs-vs`.
+- **Waiting for you:** only a `blocked` session's dot (stopped on a question or permission)
+  breathes (`.loop("opacity")`) in `spaces-tree` and `tabs-vs`. A `done` dot (finished while you
+  weren't looking; `idle` once you look) stays steady: with it pulsing too, every idle session blinked.
 - **Tab names:** `spaces-tree` renames a Claude tab still under a default name ("Claude Code",
   a number) to its terminal title, Claude's session title, once it has one. Names the person
   gave are left alone.
