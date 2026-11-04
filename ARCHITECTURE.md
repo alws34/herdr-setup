@@ -125,9 +125,11 @@ stay in step, because mods can't import each other's code.
   newest transcript and showed another session (2026-11-04).
 - **Chat history:** only the newest rows are built; scrolling up near the top loads more
   (the "Show earlier messages" button does the same).
-- **Waiting for you:** only a `blocked` session's dot (stopped on a question or permission)
-  breathes (`.loop("opacity")`) in `spaces-tree` and `tabs-vs`. A `done` dot (finished while you
-  weren't looking; `idle` once you look) stays steady: with it pulsing too, every idle session blinked.
+- **Waiting for you:** a `done` (finished while you weren't looking) or `blocked` (asking) session's
+  dot breathes (`.loop("opacity")`) in `spaces-tree` and `tabs-vs`. Herdr turns `done` into `idle`
+  only when the terminal is looked at, which the chat view hides, so every session read in the chat
+  stayed `done` and kept breathing. The chat now marks its shown session seen the same way
+  (`hc label <terminal> herdr.seen=<turn>`) while the window is in front.
 - **Tab names:** `spaces-tree` renames a Claude tab still under a default name ("Claude Code",
   a number) to its terminal title, Claude's session title, once it has one. Names the person
   gave are left alone. Dragging a session row within its space reorders it (`tab.move`).

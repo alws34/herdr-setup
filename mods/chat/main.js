@@ -17,7 +17,7 @@
 //   prompt and its options; a button presses the option's number (or arrows + Enter).
 import { View, div, image } from "gpui-kit";
 import { h_flex, v_flex, TextView, TextareaState, Textarea, EditorState, Editor } from "gpui-base";
-import { spaces, panes, agents, terminals, exec, hc, readTextFile, writeTextFile, home, appHome, theme, shared, setShared, layout, run, notify, settings } from "herdr";
+import { spaces, panes, agents, terminals, exec, hc, readTextFile, writeTextFile, home, appHome, theme, shared, setShared, layout, run, notify, settings, window } from "herdr";
 
 const VIEW = "chat.view";                       // { [tabId]: "chat" | "terminal" } (session-files reads it)
 const READER = `${appHome()}/mods/chat/read.sh`;
@@ -462,7 +462,11 @@ export default class Chat extends View {
     const pane = claudePane(tab.id);
     if (!pane) return;
     const s = this.session(tab.id), status = statusOf(pane, s);
-    const due = !s.loaded || s.underfilled || status === "working" || status === "blocked" || s.status !== status || this.ticks % 4 === 0;
+    // Herdr counts a session as seen only when its terminal is looked at, so one read here stayed
+    // "done" for good and every read session kept a waiting dot (2026-11-04). Mark it seen as the
+    // terminal view does (hc label herdr.seen = its turn), while the window is in front.
+    if (pane.status === "done" && window().active && !this.marking) this.markSeen(pane.terminal);
+    const due =!s.loaded || s.underfilled || status === "working" || status === "blocked" || s.status !== status || this.ticks % 4 === 0;
     s.status = status;
     if (!due) return;
     this.busy = true;
@@ -471,6 +475,15 @@ export default class Chat extends View {
       catch (e) { console.log(`chat: ${e?.message ?? e}`); }
       this.busy = false;
     });
+  }
+
+  async markSeen(address) {
+    this.marking = true;
+    try {
+      const turn = JSON.parse((await hc(["get", address])).stdout)?.turn;
+      if (turn != null) await hc(["label", address, `herdr.seen=${turn}`]);
+    } catch (e) { console.log(`chat: ${e?.message ?? e}`); }
+    this.marking = false;
   }
 
   // Brings a session up to date. Returns whether anything shown changed.
