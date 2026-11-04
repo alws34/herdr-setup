@@ -1,6 +1,6 @@
 # CLAUDE.md: Herdr app setup
 
-This folder is Alon's personal setup of the **Herdr desktop app** (herdr-app 0.1.11). The
+This folder is Alon's personal setup of the **Herdr desktop app** (herdr-app 0.1.12). The
 app redraws itself live from the files here. The whole window is layouts (JSON) plus mods
 (JavaScript on gpui-kit, drawn natively, with no DOM). See `ARCHITECTURE.md` for how the
 pieces fit together.
